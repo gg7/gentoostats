@@ -13,7 +13,7 @@ class Metadata(object):
         """
         Initialize the class with the cpv. All metadata are read from portage
         """
-        self.repo, self.counter, self.build_time, self.size = VARDB.aux_get(cpv, ['repository', 'COUNTER', 'BUILD_TIME', 'SIZE'])
+        self.repo, self.build_time, self.size = VARDB.aux_get(cpv, ['repository', 'BUILD_TIME', 'SIZE'])
 
         system_use = portage.settings['USE'].split()
         fa = FlagAnalyzer(system=system_use)
@@ -55,12 +55,6 @@ class Metadata(object):
         if self.repo:
             return self.repo
         return 'Unknown'
-
-    def getCounter(self):
-        """
-        Return the package install counter. How's this useful ?
-        """
-        return self.counter
 
     def getBuildTime(self):
         """

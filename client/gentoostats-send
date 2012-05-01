@@ -40,17 +40,15 @@ def serialize(object, human=False):
 def main():
     parser = argparse.ArgumentParser(description='Gentoostats client')
     parser.add_argument('-s', '--server', default='soc.dev.gentoo.org')
-    parser.add_argument('-p', '--port', type = int, default=443)
+    parser.add_argument('-p', '--port', type=int, default=443)
     parser.add_argument('-u', '--url', default='/gentoostats')
     parser.add_argument('-a', '--auth', default='/etc/gentoostats/auth.cfg')
     parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
     parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('-d', '--dryrun', action='store_true')
     args = vars(parser.parse_args())
 
     pl = Payload(configfile=args['config'])
-
-    if args['verbose']:
-        pl.dump(human=True)
 
     post_data = pl.get()
     post_data['AUTH'] = getAuthInfo(auth=args['auth'])
@@ -62,6 +60,16 @@ def main():
 
     post_body = serialize(post_data, human=True)
     post_headers = {'Content-type':'application/json'}
+
+    if args['verbose'] or args['dryrun']:
+        print "Payload:"
+        pl.dump(human=True)
+
+        print "Using url " + post_url
+
+    if args['dryrun']:
+        print 'Dry run, exiting...'
+        return
 
     try:
         conn = httplib.HTTPSConnection(args['server'] + ':' + str(args['port']))

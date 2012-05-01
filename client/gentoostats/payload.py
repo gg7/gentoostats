@@ -61,10 +61,11 @@ class Payload(object):
             p['USE']['PLUS'] = [] if self.__masked('PACKAGES', 'USE_PLUS') else m.getPlusFlags()
             p['USE']['MINUS'] = [] if self.__masked('PACKAGES', 'USE_MINUS') else m.getMinusFlags()
             p['USE']['UNSET'] = [] if self.__masked('PACKAGES', 'USE_UNSET') else m.getUnsetFlags()
-            p['COUNTER'] = None if self.__masked('PACKAGES', 'COUNTER') else m.getCounter()
             p['SIZE'] = None if self.__masked('PACKAGES', 'SIZE') else m.getSize()
             p['BUILD_TIME'] = None if self.__masked('PACKAGES', 'BUILD_TIME') else m.getBuildTime()
             self.payload['PACKAGES'][cpv] = p
+
+        self.payload['SELECTEDSETS'] = 'Unknown' if self.__masked('PACKAGES', 'SELECTEDSETS') else Packages().getSelectedSets()
 
     def get(self):
         """
