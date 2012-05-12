@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 import sys
 import json
 import argparse
 import ConfigParser
 import httplib
+
 from gentoostats.payload import Payload
 
 def getAuthInfo(auth):
@@ -62,21 +65,21 @@ def main():
     post_headers = {'Content-type':'application/json'}
 
     if args['verbose'] or args['dryrun']:
-        print "Payload:"
+        print("Payload:")
         pl.dump(human=True)
 
-        print "Using url " + post_url
+        print("Using url " + post_url)
 
     if args['dryrun']:
-        print 'Dry run, exiting...'
+        print("Dry run, exiting...")
         return
 
     try:
         conn = httplib.HTTPSConnection(args['server'] + ':' + str(args['port']))
         conn.request('POST', url=post_url, headers=post_headers, body=post_body)
         response = conn.getresponse()
-        print response.status, response.reason
-        print 'Server response: ' + response.read()
+        print(response.status, response.reason)
+        print('Server response: ' + response.read())
     except httplib.HTTPException:
         sys.stderr.write('Something went wrong')
         sys.exit(1)

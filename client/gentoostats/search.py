@@ -1,4 +1,4 @@
-
+from __future__ import print_function
 import pprint as pp
 from gentoostats import utils
 
@@ -6,7 +6,7 @@ def pprint(title, object):
     """
     Pretty printer for the decoded json data
     """
-    print title
+    print(title)
     pp.pprint(object)
 
 def add_parser(subparsers):
@@ -39,4 +39,4 @@ def search(args):
     get_data = utils.GET(server = args.server, url = args.url + url_base + url_extra, headers = utils.headers)
     data = utils.deserialize(get_data)
 
-    pprint ('Search results', data)
+    pprint('Search results', data)

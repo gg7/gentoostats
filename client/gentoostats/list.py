@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 import pprint as pp
 from gentoostats import utils
@@ -6,7 +7,7 @@ def pprint(title, object):
     """
     Pretty printer for the decoded json data
     """
-    print title
+    print(title)
     pp.pprint(object)
 
 def add_parser(subparsers):

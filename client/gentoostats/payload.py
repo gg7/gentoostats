@@ -1,7 +1,8 @@
-
+from __future__ import print_function
 import sys
 import pprint
 import ConfigParser
+
 from gentoostats.environment import Environment
 from gentoostats.packages import Packages
 from gentoostats.metadata import Metadata
@@ -80,4 +81,4 @@ class Payload(object):
         if human:
             pprint.pprint(self.payload)
         else:
-            print self.payload
+            print(self.payload)
