@@ -9,7 +9,7 @@ class Packages(object):
     A class encapsulating providers for reading installed packages from portage
     """
 
-    def getInstalledCPs(self, sort=False):
+    def getInstalledCPs(self):
         """
         Read installed packages as category/packagename
         """
@@ -18,7 +18,7 @@ class Packages(object):
             return sorted(installed_cps)
         return installed_cps
 
-    def getInstalledCPVs(self, sort=False):
+    def getInstalledCPVs(self):
         """
         Read installed packages as category/packagename-version
         """
