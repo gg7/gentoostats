@@ -1,13 +1,13 @@
-
 import json
 import httplib
+import pprint as pp
 
 # json headers for gentoostats-cli
 headers = {'Accept': 'application/json'}
 
 def GET(server, url, headers, https=True):
     """
-    Get url from server using headers 
+    Get url from server using headers
     """
     if https:
         conn = httplib.HTTPSConnection(server)
@@ -21,14 +21,21 @@ def GET(server, url, headers, https=True):
     finally:
         if conn:
             conn.close()
+
     return data
 
-def deserialize(object):
+def deserialize(obj):
     """
     Decode json object
     """
     try:
-        decoded = json.JSONDecoder().decode(object)
+        return json.JSONDecoder().decode(obj)
     except (ValueError, TypeError):
         return None
-    return decoded
+
+def pprint(title, obj):
+    """
+    Pretty printer for the decoded json data
+    """
+    print(title)
+    pp.pprint(obj)

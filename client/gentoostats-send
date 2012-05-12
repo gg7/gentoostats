@@ -28,7 +28,7 @@ def getAuthInfo(auth):
         sys.stderr.write('Malformed auth config')
         sys.exit(1)
 
-def serialize(object, human=False):
+def serialize(obj, human=False):
     """
     Encode using json
     """
@@ -38,7 +38,8 @@ def serialize(object, human=False):
     else:
         indent = None
         sort_keys = False
-    return json.JSONEncoder(indent=indent, sort_keys=sort_keys).encode(object)
+
+    return json.JSONEncoder(indent=indent, sort_keys=sort_keys).encode(obj)
 
 def main():
     parser = argparse.ArgumentParser(description='Gentoostats client')

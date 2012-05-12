@@ -1,14 +1,6 @@
 from __future__ import print_function
 
-import pprint as pp
 from gentoostats import utils
-
-def pprint(title, object):
-    """
-    Pretty printer for the decoded json data
-    """
-    print(title)
-    pp.pprint(object)
 
 def add_parser(subparsers):
     """
@@ -46,35 +38,35 @@ def list_arch(args):
     /arch
     """
     data = list(args.server, args.url, '/arch', utils.headers)
-    pprint('Arch', data)
+    utils.pprint('Arch', data)
 
 def list_feature(args):
     """
     /feature
     """
     data = list(args.server, args.url, '/feature', utils.headers)
-    pprint('Feature', data)
+    utils.pprint('Feature', data)
 
 def list_lang(args):
     """
     /lang
     """
     data = list(args.server, args.url, '/lang', utils.headers)
-    pprint('Lang', data)
+    utils.pprint('Lang', data)
 
 def list_mirror(args):
     """
     /mirror
     """
     data = list(args.server, args.url, '/mirror', utils.headers)
-    pprint('Mirror', data)
+    utils.pprint('Mirror', data)
 
 def list_repo(args):
     """
     /repo
     """
     data = list(args.server, args.url, '/repo', utils.headers)
-    pprint('Repo', data)
+    utils.pprint('Repo', data)
 
 def list_package(args):
     """
@@ -97,7 +89,7 @@ def list_package(args):
                 url_pkg += '-' + args.version
 
     data = list(args.server, args.url, url_pkg + url_top, utils.headers)
-    pprint(title, data)
+    utils.pprint(title, data)
 
 def list_use(args):
     """
@@ -110,7 +102,7 @@ def list_use(args):
         url_use += '/' + args.use
 
     data = list(args.server, args.url, url_use, utils.headers)
-    pprint(title, data)
+    utils.pprint(title, data)
 
 
 def list(server, url_base, url_extra, headers):
