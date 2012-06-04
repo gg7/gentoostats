@@ -1,8 +1,0 @@
-A package statistics reporting program for Gentoo Linux. Includes a client, as
-well as a server.
-
-This is an updated version of gentoostats for GSoC 2012 and is based on the work
-of Vikraman Choudhury for his GSoC 2011 project, "gentoostats".
-
-GSoC 2011 Project:  http://www.google-melange.com/gsoc/project/google/gsoc2011/vh4x0r/26001
-GSoC 2011 Proposal: http://www.google-melange.com/gsoc/proposal/review/google/gsoc2011/vh4x0r/1
