@@ -50,6 +50,7 @@ def main():
     parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
     parser.add_argument('-v', '--verbose', action='store_true')
     parser.add_argument('-d', '--dryrun', action='store_true')
+    parser.add_argument('--nossl', action='store_true')
     args = vars(parser.parse_args())
 
     pl = Payload(configfile=args['config'])
@@ -76,7 +77,11 @@ def main():
         return
 
     try:
-        conn = httplib.HTTPSConnection(args['server'] + ':' + str(args['port']))
+        if args['nossl']:
+            conn = httplib.HTTPConnection(args['server'] + ':' + str(args['port']))
+        else:
+            conn = httplib.HTTPSConnection(args['server'] + ':' + str(args['port']))
+
         conn.request('POST', url=post_url, headers=post_headers, body=post_body)
         response = conn.getresponse()
         print(response.status, response.reason)
