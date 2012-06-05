@@ -13,19 +13,13 @@ class Packages(object):
         """
         Read installed packages as category/packagename
         """
-        installed_cps = VARDB.cp_all()
-        if sort:
-            return sorted(installed_cps)
-        return installed_cps
+        return VARDB.cp_all()
 
     def getInstalledCPVs(self):
         """
         Read installed packages as category/packagename-version
         """
-        installed_cpvs = VARDB.cpv_all()
-        if sort:
-            return sorted(installed_cpvs)
-        return installed_cpvs
+        return VARDB.cpv_all()
 
     def getSelectedSets(self):
         """
