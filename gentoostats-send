@@ -4,9 +4,9 @@ from __future__ import print_function
 
 import sys
 import json
+import httplib
 import argparse
 import ConfigParser
-import httplib
 
 from gentoostats.payload import Payload
 
@@ -45,7 +45,7 @@ def main():
     parser = argparse.ArgumentParser(description='Gentoostats client')
     parser.add_argument('-s', '--server', default='soc.dev.gentoo.org')
     parser.add_argument('-p', '--port', type=int, default=443)
-    parser.add_argument('-u', '--url', default='/gentoostats')
+    parser.add_argument('-u', '--url', default='/receive')
     parser.add_argument('-a', '--auth', default='/etc/gentoostats/auth.cfg')
     parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
     parser.add_argument('-v', '--verbose', action='store_true')
@@ -58,19 +58,16 @@ def main():
     post_data = pl.get()
     post_data['AUTH'] = getAuthInfo(auth=args['auth'])
 
-    post_url = args['url'].strip('/')
-    if not len(post_url) == 0:
-        post_url = '/' + post_url
-    post_url = post_url + '/host/' + post_data['AUTH']['UUID']
-
-    post_body = serialize(post_data, human=True)
-    post_headers = {'Content-type':'application/json'}
+    post_url     = args['url'].rstrip('/') + '/' + post_data['AUTH']['UUID']
+    post_body    = serialize(post_data)
+    post_headers = {'Content-type': 'application/json'}
 
     if args['verbose'] or args['dryrun']:
+        print("Using URL '%s'" % (post_url))
+
         print("Payload:")
         pl.dump(human=True)
 
-        print("Using url " + post_url)
 
     if args['dryrun']:
         print("Dry run, exiting...")
