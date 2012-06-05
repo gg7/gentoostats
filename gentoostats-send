@@ -30,7 +30,7 @@ def getAuthInfo(auth):
 
 def serialize(obj, human=False):
     """
-    Encode using json
+    Encode an object using JSON.
     """
     if human:
         indent = 2
@@ -42,47 +42,59 @@ def serialize(obj, human=False):
     return json.JSONEncoder(indent=indent, sort_keys=sort_keys).encode(obj)
 
 def main():
+    """
+    Main function of the program.
+    """
     parser = argparse.ArgumentParser(description='Gentoostats client')
     parser.add_argument('-s', '--server', default='soc.dev.gentoo.org')
     parser.add_argument('-p', '--port', type=int, default=443)
     parser.add_argument('-u', '--url', default='/receive')
     parser.add_argument('-a', '--auth', default='/etc/gentoostats/auth.cfg')
     parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
-    parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('-v', '--verbose', action='count', default=0)
     parser.add_argument('-d', '--dryrun', action='store_true')
     parser.add_argument('--nossl', action='store_true')
+
     args = vars(parser.parse_args())
 
-    pl = Payload(configfile=args['config'])
+    if not 0 < args['port'] < 65535:
+        print("Error: invalid port number")
+        return
 
-    post_data = pl.get()
+    server_url = "%s:%s" % (args['server'], str(args['port']))
+
+    payload           = Payload(configfile=args['config'])
+    post_data         = payload.get()
     post_data['AUTH'] = getAuthInfo(auth=args['auth'])
 
-    post_url     = args['url'].rstrip('/') + '/' + post_data['AUTH']['UUID']
-    post_body    = serialize(post_data)
-    post_headers = {'Content-type': 'application/json'}
+    request_url       = args['url'].rstrip('/') + '/' + post_data['AUTH']['UUID']
+    request_body      = serialize(post_data)
+    request_headers   = {'Content-type': 'application/json'}
 
-    if args['verbose'] or args['dryrun']:
-        print("Using URL '%s'" % (post_url))
+    if args['verbose']:
+        print("Using URL:  '%s%s'" % (server_url, request_url))
+        print("Using SSL:  %s"     % (str(not args['nossl'])))
 
-        print("Payload:")
-        pl.dump(human=True)
+        if args['verbose'] >= 2:
+            print("Payload:")
+            payload.dump(human=True)
 
+    if args['nossl']:
+        conn_class = httplib.HTTPConnection
+    else:
+        conn_class = httplib.HTTPSConnection
 
     if args['dryrun']:
         print("Dry run, exiting...")
         return
 
     try:
-        if args['nossl']:
-            conn = httplib.HTTPConnection(args['server'] + ':' + str(args['port']))
-        else:
-            conn = httplib.HTTPSConnection(args['server'] + ':' + str(args['port']))
-
-        conn.request('POST', url=post_url, headers=post_headers, body=post_body)
+        conn = conn_class(server_url)
+        conn.request('POST', url=request_url, headers=request_headers, body=request_body)
         response = conn.getresponse()
-        print(response.status, response.reason)
-        print('Server response: ' + response.read())
+
+        print('Server response: %s (%s)' % (response.status, response.reason))
+        print(response.read())
     except httplib.HTTPException:
         sys.stderr.write('Something went wrong')
         sys.exit(1)
