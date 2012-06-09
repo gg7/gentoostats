@@ -17,7 +17,7 @@ You can select what is reported by editing /etc/gentoostats/payload.cfg.
 
 You can view what exactly is going to be reported by running
 
-    gentoostats-send --dryrun
+    gentoostats-send -vv --dryrun
 
 What can be reported
 --------------------

@@ -37,10 +37,10 @@ class Packages(object):
         setconfig._parse()
 
         # selected sets (includes at least the 'selected' set):
-        selectedSets = dict()
+        selected_sets = dict()
 
-        def includeSet(s):
-            if s in selectedSets:
+        def _include_set(s):
+            if s in selected_sets:
                 return
 
             if s not in setconfig.psets:
@@ -50,12 +50,12 @@ class Packages(object):
             nonatoms = setconfig.psets[s].getNonAtoms()
 
             # atoms and nonatoms for each set:
-            selectedSets[s] = list(atoms.union(nonatoms))
+            selected_sets[s] = list(atoms.union(nonatoms))
             # (use a list so that it's JSON serializable by default)
 
             # recursevely add any sets included by the current set:
             subsets = [x[len(SETPREFIX):] for x in nonatoms if x.startswith(SETPREFIX)]
-            map(includeSet, subsets)
+            map(_include_set, subsets)
 
-        includeSet("selected")
-        return selectedSets
+        _include_set("selected")
+        return selected_sets

@@ -33,13 +33,21 @@ def serialize(obj, human=False):
     Encode an object using JSON.
     """
     if human:
-        indent = 2
-        sort_keys = True
+        indent     = 2
+        sort_keys  = True
+        separators = (', ', ': ')
     else:
-        indent = None
-        sort_keys = False
+        indent     = None
+        sort_keys  = False
+        separators = (',', ':')
 
-    return json.JSONEncoder(indent=indent, sort_keys=sort_keys).encode(obj)
+    encoder = json.JSONEncoder( indent       = indent
+                              , sort_keys    = sort_keys
+                              , separators   = separators
+                              , ensure_ascii = False # TODO: double check
+    )
+
+    return encoder.encode(obj)
 
 def main():
     """
@@ -48,7 +56,7 @@ def main():
     parser = argparse.ArgumentParser(description='Gentoostats client')
     parser.add_argument('-s', '--server', default='soc.dev.gentoo.org')
     parser.add_argument('-p', '--port', type=int, default=443)
-    parser.add_argument('-u', '--url', default='/receive')
+    parser.add_argument('-u', '--url', default='/upload')
     parser.add_argument('-a', '--auth', default='/etc/gentoostats/auth.cfg')
     parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
     parser.add_argument('-v', '--verbose', action='count', default=0)
@@ -61,23 +69,45 @@ def main():
         print("Error: invalid port number")
         return
 
-    server_url = "%s:%s" % (args['server'], str(args['port']))
-
-    payload           = Payload(configfile=args['config'])
-    post_data         = payload.get()
-    post_data['AUTH'] = getAuthInfo(auth=args['auth'])
-
-    request_url       = args['url'].rstrip('/') + '/' + post_data['AUTH']['UUID']
-    request_body      = serialize(post_data)
-    request_headers   = {'Content-type': 'application/json'}
+    server_url  = "%s:%s" % (args['server'], str(args['port']))
+    request_url = args['url'].rstrip('/') + '/'
 
     if args['verbose']:
         print("Using URL:  '%s%s'" % (server_url, request_url))
         print("Using SSL:  %s"     % (str(not args['nossl'])))
 
-        if args['verbose'] >= 2:
-            print("Payload:")
-            payload.dump(human=True)
+    ###
+
+    if args['verbose']:
+        print("Generating payload... ", end='')
+        sys.stdout.flush()
+
+    payload           = Payload(configfile=args['config'])
+    post_data         = payload.get()
+    post_data['AUTH'] = getAuthInfo(auth=args['auth'])
+
+    if args['verbose']:
+        print("done")
+
+    ###
+
+    if args['verbose']:
+        print("Serialising payload... ", end='')
+        sys.stdout.flush()
+
+    request_body      = serialize(post_data)
+    request_headers   = {'Content-type': 'application/json'}
+
+    if args['verbose']:
+        print("done")
+
+    ###
+
+    if args['verbose'] >= 2:
+        print("Serialised payload:")
+        payload.dump(human=True)
+
+    ###
 
     if args['nossl']:
         conn_class = httplib.HTTPConnection
@@ -89,6 +119,10 @@ def main():
         return
 
     try:
+        if args['verbose']:
+            print("Sending report... ")
+            sys.stdout.flush()
+
         conn = conn_class(server_url)
         conn.request('POST', url=request_url, headers=request_headers, body=request_body)
         response = conn.getresponse()

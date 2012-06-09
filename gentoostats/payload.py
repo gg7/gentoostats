@@ -22,7 +22,7 @@ class Payload(object):
             sys.exit(1)
 
         self.payload = dict()
-        self.payload['PROTOCOL'] = 1
+        self.payload['PROTOCOL'] = 2
         self.update()
 
     def __masked(self, section, item):
