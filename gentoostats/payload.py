@@ -44,12 +44,15 @@ class Payload(object):
         env = Environment()
         self.payload['PLATFORM'] = 'Unknown' if self.__masked('ENV', 'PLATFORM') else env.getPlatform()
         self.payload['LASTSYNC'] = 'Unknown' if self.__masked('ENV', 'LASTSYNC') else env.getLastSync()
-        self.payload['PROFILE'] = 'Unknown' if self.__masked('ENV', 'PROFILE') else env.getProfile()
+        self.payload['PROFILE']  = 'Unknown' if self.__masked('ENV', 'PROFILE')  else env.getProfile()
 
-        for var in ['ARCH', 'CHOST', 'CFLAGS', 'CXXFLAGS', 'FFLAGS', 'LDFLAGS', 'MAKEOPTS', 'SYNC']:
+        for var in ['ARCH', 'CHOST', 'CFLAGS', 'CXXFLAGS', 'FFLAGS', 'SYNC', \
+                'LDFLAGS', 'MAKEOPTS', 'EMERGE_DEFAULT_OPTS', \
+                'PORTAGE_RSYNC_EXTRA_OPTS', 'ACCEPT_LICENSE']:
             self.payload[var] = None if self.__masked('ENV', var) else env.getVar(var)
 
-        for var in ['ACCEPT_KEYWORDS', 'LANG', 'GENTOO_MIRRORS', 'FEATURES', 'USE']:
+        for var in ['ACCEPT_KEYWORDS', 'LANG', 'GENTOO_MIRRORS', 'FEATURES', \
+                'USE']:
             self.payload[var] = [] if self.__masked('ENV', var) else env.getVar(var).split()
 
         self.payload['PACKAGES'] = dict()
