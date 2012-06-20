@@ -7,142 +7,146 @@ import json
 import argparse
 
 try:
-    import ConfigParser
+	import ConfigParser
 except ImportError:
-    import configparser as ConfigParser
+	import configparser as ConfigParser
 
 try:
-    import httplib
+	import httplib
 except ImportError:
-    import http.client as httplib
+	import http.client as httplib
 
 from gentoostats.payload import Payload
 
 def getAuthInfo(auth):
-    """
-    Read auth config
-    """
-    config = ConfigParser.ConfigParser()
-    if len(config.read(auth)) == 0:
-        sys.stderr.write('Cannot read ' + auth)
-        sys.exit(1)
+	"""
+	Read auth info from the config file "auth".
+	"""
+	config = ConfigParser.ConfigParser()
+	if len(config.read(auth)) == 0:
+		sys.stderr.write('Cannot read ' + auth)
+		sys.exit(1)
 
-    try:
-        uuid = config.get('AUTH', 'UUID')
-        passwd = config.get('AUTH', 'PASSWD')
-        auth_info = {'UUID' : uuid, 'PASSWD' : passwd}
-        return auth_info
-    except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
-        sys.stderr.write('Malformed auth config')
-        sys.exit(1)
+	try:
+		uuid = config.get('AUTH', 'UUID')
+		passwd = config.get('AUTH', 'PASSWD')
+		auth_info = {'UUID' : uuid, 'PASSWD' : passwd}
+		return auth_info
+	except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+		sys.stderr.write('Malformed auth config')
+		sys.exit(1)
 
 def serialize(obj, human=False):
-    """
-    Encode an object using JSON.
-    """
-    if human:
-        indent     = 2
-        sort_keys  = True
-        separators = (', ', ': ')
-    else:
-        indent     = None
-        sort_keys  = False
-        separators = (',', ':')
+	"""
+	Encode an object using JSON.
+	"""
+	if human:
+		indent     = 2
+		sort_keys  = True
+		separators = (', ', ': ')
+	else:
+		indent     = None
+		sort_keys  = False
+		separators = (',', ':')
 
-    encoder = json.JSONEncoder( indent       = indent
-                              , sort_keys    = sort_keys
-                              , separators   = separators
-                              , ensure_ascii = False # TODO: double check
-    )
+	encoder = json.JSONEncoder( indent       = indent
+	                          , sort_keys    = sort_keys
+	                          , separators   = separators
+	                          , ensure_ascii = False # TODO: double check
+	)
 
-    return encoder.encode(obj)
+	return encoder.encode(obj)
 
 def main():
-    """
-    Main function of the program.
-    """
-    parser = argparse.ArgumentParser(description='Gentoostats client')
-    parser.add_argument('-s', '--server', default='soc.dev.gentoo.org')
-    parser.add_argument('-p', '--port', type=int, default=443)
-    parser.add_argument('-u', '--url', default='/upload')
-    parser.add_argument('-a', '--auth', default='/etc/gentoostats/auth.cfg')
-    parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
-    parser.add_argument('-v', '--verbose', action='count', default=0)
-    parser.add_argument('-d', '--dryrun', action='store_true')
-    parser.add_argument('--nossl', action='store_true')
+	"""
+	Main function of the program.
+	"""
+	parser = argparse.ArgumentParser(description='Gentoostats client')
+	parser.add_argument('-s', '--server', default='soc.dev.gentoo.org')
+	parser.add_argument('-p', '--port', type=int, default=443)
+	parser.add_argument('-u', '--url', default='/upload')
+	parser.add_argument('-a', '--auth', default='/etc/gentoostats/auth.cfg')
+	parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
+	parser.add_argument('-v', '--verbose', action='count', default=0)
+	parser.add_argument('-d', '--dryrun', action='store_true')
+	parser.add_argument('--nossl', action='store_true')
 
-    args = vars(parser.parse_args())
+	args = vars(parser.parse_args())
 
-    if not 0 < args['port'] < 65535:
-        print("Error: invalid port number")
-        return
+	if not 0 < args['port'] < 65535:
+		print("Error: invalid port number")
+		return
 
-    server_url  = "%s:%s" % (args['server'], str(args['port']))
-    request_url = args['url'].rstrip('/') + '/'
+	server_url  = "%s:%s" % (args['server'], str(args['port']))
+	request_url = args['url'].rstrip('/') + '/'
 
-    if args['verbose']:
-        print("Using URL:  '%s%s'" % (server_url, request_url))
-        print("Using SSL:  %s"     % (str(not args['nossl'])))
+	if args['verbose']:
+		print("Using URL:  '%s%s'" % (server_url, request_url))
+		print("Using SSL:  %s"     % (str(not args['nossl'])))
 
-    ###
+	###
 
-    if args['verbose']:
-        print("Generating payload... ", end='')
-        sys.stdout.flush()
+	if args['verbose']:
+		print("Generating payload... ", end='')
+		sys.stdout.flush()
 
-    payload           = Payload(configfile=args['config'])
-    post_data         = payload.get()
-    post_data['AUTH'] = getAuthInfo(auth=args['auth'])
+	payload = Payload(configfile=args['config'])
+	post_data = payload.get()
+	post_data['AUTH'] = getAuthInfo(auth=args['auth'])
 
-    if args['verbose']:
-        print("done")
+	if args['verbose']:
+		print("done")
 
-    ###
+	###
 
-    if args['verbose']:
-        print("Serialising payload... ", end='')
-        sys.stdout.flush()
+	if args['verbose']:
+		print("Serialising payload... ", end='')
+		sys.stdout.flush()
 
-    request_body      = serialize(post_data)
-    request_headers   = {'Content-type': 'application/json'}
+	request_body    = serialize(post_data)
+	request_headers = {'Content-type': 'application/json'}
 
-    if args['verbose']:
-        print("done")
+	if args['verbose']:
+		print("done")
 
-    ###
+	###
 
-    if args['verbose'] >= 2:
-        print("Serialised payload:")
-        payload.dump(human=True)
+	if args['verbose'] >= 2:
+		print("Serialised payload:")
+		payload.dump(human=True)
 
-    ###
+	###
 
-    if args['nossl']:
-        conn_class = httplib.HTTPConnection
-    else:
-        conn_class = httplib.HTTPSConnection
+	if args['nossl']:
+		conn_class = httplib.HTTPConnection
+	else:
+		conn_class = httplib.HTTPSConnection
 
-    if args['dryrun']:
-        print("Dry run, exiting...")
-        return
+	if args['dryrun']:
+		print("Dry run, exiting...")
+		return
 
-    try:
-        if args['verbose']:
-            print("Sending report... ")
-            sys.stdout.flush()
+	try:
+		if args['verbose']:
+			print("Sending report... ")
+			sys.stdout.flush()
 
-        conn = conn_class(server_url)
-        conn.request('POST', url=request_url, headers=request_headers, body=request_body)
-        response = conn.getresponse()
+		conn = conn_class(server_url)
+		conn.request( 'POST'
+		            , url     = request_url
+		            , headers = request_headers
+		            , body    = request_body
+		)
+		response = conn.getresponse()
 
-        print('Server response: %s (%s)' % (response.status, response.reason))
-        print(response.read())
-    except httplib.HTTPException:
-        sys.stderr.write('Something went wrong')
-        sys.exit(1)
-    finally:
-        if conn:
-            conn.close()
+		print('Server response: %s (%s)' % (response.status, response.reason))
+		print(response.read())
+	except httplib.HTTPException:
+		sys.stderr.write('Something went wrong')
+		sys.exit(1)
+	finally:
+		if conn:
+			conn.close()
 
 if __name__ == "__main__":
-    main()
+	main()

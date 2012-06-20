@@ -4,57 +4,57 @@ from portage._sets import load_default_config
 from gentoolkit.dbapi import VARDB
 
 class Packages(object):
-    """
-    A class encapsulating providers for reading installed packages from portage
-    """
+	"""
+	A class encapsulating providers for reading installed packages from portage
+	"""
 
-    def getInstalledCPs(self):
-        """
-        Read installed packages as category/packagename
-        """
-        return VARDB.cp_all()
+	def getInstalledCPs(self):
+		"""
+		Read installed packages as category/packagename
+		"""
+		return VARDB.cp_all()
 
-    def getInstalledCPVs(self):
-        """
-        Read installed packages as category/packagename-version
-        """
-        return VARDB.cpv_all()
+	def getInstalledCPVs(self):
+		"""
+		Read installed packages as category/packagename-version
+		"""
+		return VARDB.cpv_all()
 
-    def getSelectedSets(self):
-        """
-        Returns a dictionary with all of the selected sets expressed as Python
-        lists. The dictionary will include at least the "selected" set, as well
-        as all sets (recursively) listed under "selected".
-        """
+	def getSelectedSets(self):
+		"""
+		Returns a dictionary with all of the selected sets expressed as Python
+		lists. The dictionary will include at least the "selected" set, as well
+		as all sets (recursively) listed under "selected".
+		"""
 
-        eroot    = portage.settings["EROOT"]
-        trees    = portage.db[eroot]
-        vartree  = trees["vartree"]
-        settings = vartree.settings
+		eroot    = portage.settings["EROOT"]
+		trees    = portage.db[eroot]
+		vartree  = trees["vartree"]
+		settings = vartree.settings
 
-        setconfig = load_default_config(settings=settings, trees=trees)
-        setconfig._parse()
+		setconfig = load_default_config(settings=settings, trees=trees)
+		setconfig._parse()
 
-        # selected sets (includes at least the 'selected' set):
-        selected_sets = dict()
+		# selected sets (includes at least the 'selected' set):
+		selected_sets = dict()
 
-        def _include_set(s):
-            if s in selected_sets:
-                return
+		def _include_set(s):
+			if s in selected_sets:
+				return
 
-            if s not in setconfig.psets:
-                raise Exception("Non existent set: " + s)
+			if s not in setconfig.psets:
+				raise Exception("Non existent set: " + s)
 
-            atoms    = setconfig.psets[s].getAtoms()
-            nonatoms = setconfig.psets[s].getNonAtoms()
+			atoms    = setconfig.psets[s].getAtoms()
+			nonatoms = setconfig.psets[s].getNonAtoms()
 
-            # atoms and nonatoms for each set:
-            selected_sets[s] = list(atoms.union(nonatoms))
-            # (use a list so that it's JSON serializable by default)
+			# atoms and nonatoms for each set:
+			selected_sets[s] = list(atoms.union(nonatoms))
+			# (use a list so that it's JSON serializable by default)
 
-            # recursevely add any sets included by the current set:
-            subsets = [x[len(SETPREFIX):] for x in nonatoms if x.startswith(SETPREFIX)]
-            map(_include_set, subsets)
+			# recursevely add any sets included by the current set:
+			subsets = [x[len(SETPREFIX):] for x in nonatoms if x.startswith(SETPREFIX)]
+			map(_include_set, subsets)
 
-        _include_set("selected")
-        return selected_sets
+		_include_set("selected")
+		return selected_sets
