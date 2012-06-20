@@ -1,5 +1,4 @@
 import os
-import logging
 import platform
 
 import portage
