@@ -1,6 +1,6 @@
 import portage
+import gentoolkit.flag
 from gentoolkit.dbapi import VARDB
-from gentoolkit.enalyze.lib import FlagAnalyzer
 from gentoolkit.enalyze.lib import KeywordAnalyser
 
 class Metadata(object):
@@ -12,34 +12,28 @@ class Metadata(object):
         """
         Initialize the class with the cpv. All metadata are read from portage
         """
-        self.repo, self.build_time, self.size = VARDB.aux_get(cpv, ['repository', 'BUILD_TIME', 'SIZE'])
-
-        system_use = portage.settings['USE'].split()
-        fa = FlagAnalyzer(system=system_use)
-        self.flags = fa.analyse_cpv(cpv)
+        self.repo, self.build_time, self.size = \
+                VARDB.aux_get(cpv, ['repository', 'BUILD_TIME', 'SIZE'])
 
         arch = portage.settings['ARCH']
         accept_keywords = portage.settings['ACCEPT_KEYWORDS'].split()
         ka = KeywordAnalyser(arch=arch, accept_keywords=accept_keywords)
         self.keyword = ka.get_inst_keyword_cpv(cpv)
 
-    def getPlusFlags(self):
-        """
-        Return list of enabled useflags
-        """
-        return list(self.flags[0])
+        self.default_iuse, self.final_use = \
+                gentoolkit.flag.get_flags(cpv, final_setting=True)
 
-    def getMinusFlags(self):
-        """
-        Return list of disabled useflags
-        """
-        return list(self.flags[1])
+        self.pkguse = gentoolkit.flag.get_installed_use(cpv, use="PKGUSE")
 
-    def getUnsetFlags(self):
+    def getUseFlagInformation(self):
         """
-        Return list of unset useflags
+        Returns [ebuild's IUSE], [user's PKGUSE], and [final USE].
         """
-        return list(self.flags[2])
+
+        return { 'IUSE':   self.default_iuse
+               , 'PKGUSE': self.pkguse
+               , 'FINAL':  self.final_use
+               }
 
     def getKeyword(self):
         """

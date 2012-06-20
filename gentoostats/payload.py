@@ -58,15 +58,19 @@ class Payload(object):
         self.payload['PACKAGES'] = dict()
         for cpv in Packages().getInstalledCPVs():
             m = Metadata(cpv)
+
             p = dict()
             p['REPO'] = None if self.__masked('PACKAGES', 'REPO') else m.getRepoName()
-            p['KEYWORD'] = None if self.__masked('PACKAGES', 'KEYWORD') else m.getKeyword()
-            p['USE'] = dict()
-            p['USE']['PLUS'] = [] if self.__masked('PACKAGES', 'USE_PLUS') else m.getPlusFlags()
-            p['USE']['MINUS'] = [] if self.__masked('PACKAGES', 'USE_MINUS') else m.getMinusFlags()
-            p['USE']['UNSET'] = [] if self.__masked('PACKAGES', 'USE_UNSET') else m.getUnsetFlags()
             p['SIZE'] = None if self.__masked('PACKAGES', 'SIZE') else m.getSize()
+            p['KEYWORD'] = None if self.__masked('PACKAGES', 'KEYWORD') else m.getKeyword()
             p['BUILD_TIME'] = None if self.__masked('PACKAGES', 'BUILD_TIME') else m.getBuildTime()
+
+            _useflags = m.getUseFlagInformation()
+            p['USE'] = dict()
+            p['USE']['IUSE'] = [] if self.__masked('PACKAGES', 'USE_IUSE') else _useflags['IUSE']
+            p['USE']['PKGUSE'] = [] if self.__masked('PACKAGES', 'USE_PKGUSE') else _useflags['PKGUSE']
+            p['USE']['FINAL'] = [] if self.__masked('PACKAGES', 'USE_FINAL') else _useflags['FINAL']
+
             self.payload['PACKAGES'][cpv] = p
 
         self.payload['SELECTEDSETS'] = 'Unknown' if self.__masked('PACKAGES', 'SELECTEDSETS') else Packages().getSelectedSets()
