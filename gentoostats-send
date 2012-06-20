@@ -4,9 +4,17 @@ from __future__ import print_function
 
 import sys
 import json
-import httplib
 import argparse
-import ConfigParser
+
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
+
+try:
+    import httplib
+except ImportError:
+    import http.client as httplib
 
 from gentoostats.payload import Payload
 

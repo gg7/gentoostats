@@ -1,7 +1,12 @@
 from __future__ import print_function
+
 import sys
 import pprint
-import ConfigParser
+
+try:
+    import ConfigParser
+except ImportError:
+    import configparser as ConfigParser
 
 from gentoostats.environment import Environment
 from gentoostats.packages import Packages
