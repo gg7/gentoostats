@@ -1,8 +1,7 @@
 import portage
 from portage._sets import SETPREFIX
 from portage._sets import load_default_config
-
-from gentoostats.dbapi import VARDB
+from gentoolkit.dbapi import VARDB
 
 class Packages(object):
     """

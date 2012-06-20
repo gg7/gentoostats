@@ -1,6 +1,5 @@
-
 import portage
-from gentoostats.dbapi import VARDB
+from gentoolkit.dbapi import VARDB
 from gentoolkit.enalyze.lib import FlagAnalyzer
 from gentoolkit.enalyze.lib import KeywordAnalyser
 
