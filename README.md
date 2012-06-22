@@ -23,7 +23,8 @@ What can be reported
 --------------------
 
 * Make.conf variables:
-    - ACCEPT_KEYWORDS
+    - ACCEPT\_KEYWORDS
+    - ACCEPT\_LICENSE
     - ARCH
     - CHOST
     - FEATURES
@@ -31,9 +32,11 @@ What can be reported
     - CXXFLAGS
     - FFLAGS
     - LDFLAGS
-    - GENTOO_MIRRORS
-    - SYNC (rsync server)
     - MAKEOPTS
+    - EMERGE\_DEFAULT\_OPTS
+    - GENTOO\_MIRRORS
+    - SYNC (rsync server)
+    - PORTAGE\_RSYNC\_EXTRA\_OPTS
 * System USE flags
 * Installed Packages
     - Package build time
@@ -41,29 +44,33 @@ What can be reported
     - Package repository (e.g. "gentoo")
     - Package size
     - Package USE flags (plus, minus, unset)
-* Selected Packages (world file, plus all selected sets)
+* Selected Packages (your world file, plus all selected sets)
 * Time of last Portage tree synchronisation
 * LANG
 * PLATFORM
-  (e.g. 'Linux-3.2.1-gentoo-r2-x86_64-Intel-R-_Core-TM-_i3_CPU_M_330_@_2.13GHz-with-gentoo-2.0.3')
+  (e.g. 'Linux-3.2.1-gentoo-r2-x86\_64-Intel-R-\_Core-TM-\_i3\_CPU\_M\_330\_@\_2.13GHz-with-gentoo-2.0.3')
 * PROFILE (e.g. 'default/linux/amd64/10.0/desktop')
 
 Installation
 ============
 
+Dependencies
+------------
+
+* Python 2.6+ (including Python 3+)
+* Portage
+* Gentoolkit
+
 Stable
 ------
 
-To install the stable client, use the ebuild found in the
-overlay/app-portage/gentoostats directory.
-
-An UUID and password will be automatically generated and saved in
-/etc/gentoostats/auth.cfg
+To use the stable client please go
+[here](https://github.com/vh4x0r/gentoostats).
 
 Unstable
 --------
 
-To download the unstable client, use this:
+To download the unstable client, clone the 'gg7' branch of this repo:
 
     git clone -b gg7 https://github.com/gg7/gentoostats.git
 
