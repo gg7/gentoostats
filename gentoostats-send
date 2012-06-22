@@ -18,6 +18,11 @@ except ImportError:
 
 from gentoostats.payload import Payload
 
+
+DEFAULT_SERVER = 'soc.dev.gentoo.org'
+DEFAULT_PORT   = 443
+
+
 def getAuthInfo(auth):
 	"""
 	Read auth info from the config file "auth".
@@ -35,6 +40,7 @@ def getAuthInfo(auth):
 	except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
 		sys.stderr.write('Malformed auth config')
 		sys.exit(1)
+
 
 def serialize(obj, human=False):
 	"""
@@ -57,13 +63,14 @@ def serialize(obj, human=False):
 
 	return encoder.encode(obj)
 
+
 def main():
 	"""
 	Main function of the program.
 	"""
 	parser = argparse.ArgumentParser(description='Gentoostats client')
-	parser.add_argument('-s', '--server', default='soc.dev.gentoo.org')
-	parser.add_argument('-p', '--port', type=int, default=443)
+	parser.add_argument('-s', '--server', default=DEFAULT_SERVER)
+	parser.add_argument('-p', '--port', type=int, default=DEFAULT_PORT)
 	parser.add_argument('-u', '--url', default='/upload')
 	parser.add_argument('-a', '--auth', default='/etc/gentoostats/auth.cfg')
 	parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
@@ -76,6 +83,9 @@ def main():
 	if not 0 < args['port'] < 65535:
 		print("Error: invalid port number")
 		return
+
+	if args['nossl'] and args['port'] == DEFAULT_PORT:
+		print("Note: Have you forgotten to change the port number?")
 
 	server_url  = "%s:%s" % (args['server'], str(args['port']))
 	request_url = args['url'].rstrip('/') + '/'
@@ -147,6 +157,7 @@ def main():
 	finally:
 		if conn:
 			conn.close()
+
 
 if __name__ == "__main__":
 	main()
