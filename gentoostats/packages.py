@@ -23,11 +23,10 @@ class Packages(object):
 		return VARDB.cpv_all()
 
 	@staticmethod
-	def get_selected_sets():
+	def get_set(set_name, recursive=True):
 		"""
-		Returns a dictionary with all of the selected sets expressed as Python
-		lists. The dictionary will include at least the "selected" set, as well
-		as all sets (recursively) listed under "selected".
+		Returns a dictionary containing the given set and all of its
+		atoms/subsets. If recursive is True, this is done recursively.
 		"""
 
 		eroot    = portage.settings["EROOT"]
@@ -41,7 +40,7 @@ class Packages(object):
 		# selected sets (includes at least the 'selected' set):
 		selected_sets = dict()
 
-		def _include_set(s):
+		def _include_set(s, recursive=True):
 			if s in selected_sets:
 				return
 
@@ -56,8 +55,9 @@ class Packages(object):
 			# (use a list so that it's JSON serializable by default)
 
 			# recursevely add any sets included by the current set:
-			subsets = [x[len(SETPREFIX):] for x in nonatoms if x.startswith(SETPREFIX)]
-			map(_include_set, subsets)
+			if recursive:
+				subsets = [x[len(SETPREFIX):] for x in nonatoms if x.startswith(SETPREFIX)]
+				map(_include_set, subsets)
 
-		_include_set("selected")
+		_include_set(set_name, recursive=recursive)
 		return selected_sets

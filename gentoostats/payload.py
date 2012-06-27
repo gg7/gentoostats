@@ -114,7 +114,7 @@ class Payload(object):
 				'SIZE', 'IUSE', 'PKGUSE', 'USE']):
 			self.analyse_packages()
 
-		self.set_data(self.payload, 'PACKAGES', 'SELECTEDSETS', Packages.get_selected_sets)
+		self.set_data(self.payload, 'PACKAGES', 'WORLDSET', Packages.get_set, "world")
 
 	def get(self):
 		"""
