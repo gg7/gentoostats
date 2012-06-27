@@ -23,7 +23,7 @@ DEFAULT_SERVER = 'soc.dev.gentoo.org'
 DEFAULT_PORT   = 443
 
 
-def getAuthInfo(auth):
+def get_auth_info(auth):
 	"""
 	Read auth info from the config file "auth".
 	"""
@@ -91,8 +91,8 @@ def main():
 	request_url = args['url'].rstrip('/') + '/'
 
 	if args['verbose']:
-		print("Using URL:  '%s%s'" % (server_url, request_url))
-		print("Using SSL:  %s"     % (str(not args['nossl'])))
+		print("Using URL: '%s%s'" % (server_url, request_url))
+		print("Using SSL: %s"     % (str(not args['nossl'])))
 
 	###
 
@@ -102,7 +102,7 @@ def main():
 
 	payload = Payload(configfile=args['config'])
 	post_data = payload.get()
-	post_data['AUTH'] = getAuthInfo(auth=args['auth'])
+	post_data['AUTH'] = get_auth_info(auth=args['auth'])
 
 	if args['verbose']:
 		print("done")

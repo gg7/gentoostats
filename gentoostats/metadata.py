@@ -20,7 +20,7 @@ class Metadata(object):
 		ka = KeywordAnalyser(arch=arch, accept_keywords=accept_keywords)
 		self.keyword = ka.get_inst_keyword_cpv(cpv)
 
-		self.default_iuse, self.final_use = \
+		self.iuse, self.use = \
 				gentoolkit.flag.get_flags(cpv, final_setting=True)
 
 		self.pkguse = gentoolkit.flag.get_installed_use(cpv, use="PKGUSE")
@@ -30,9 +30,9 @@ class Metadata(object):
 		Returns [ebuild's IUSE], [user's PKGUSE], and [final USE].
 		"""
 
-		return { 'IUSE':   self.default_iuse
+		return { 'IUSE':   self.iuse
 		       , 'PKGUSE': self.pkguse
-		       , 'FINAL':  self.final_use
+		       , 'USE':    self.use
 		       }
 
 	def get_keyword(self):

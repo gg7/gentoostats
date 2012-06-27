@@ -5,22 +5,25 @@ from gentoolkit.dbapi import VARDB
 
 class Packages(object):
 	"""
-	A class encapsulating providers for reading installed packages from portage
+	A class encapsulating providers for reading installed packages from portage.
 	"""
 
-	def get_installed_CPs(self):
+	@staticmethod
+	def get_installed_CPs():
 		"""
-		Read installed packages as category/packagename
+		Read installed packages as category/packagename.
 		"""
 		return VARDB.cp_all()
 
-	def get_installed_CPVs(self):
+	@staticmethod
+	def get_installed_CPVs():
 		"""
-		Read installed packages as category/packagename-version
+		Read installed packages as category/packagename-version.
 		"""
 		return VARDB.cpv_all()
 
-	def get_selected_sets(self):
+	@staticmethod
+	def get_selected_sets():
 		"""
 		Returns a dictionary with all of the selected sets expressed as Python
 		lists. The dictionary will include at least the "selected" set, as well
