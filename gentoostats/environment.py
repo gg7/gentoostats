@@ -15,32 +15,35 @@ class Environment(object):
 		"""
 		self.portdir = portage.settings['PORTDIR']
 
-	def getVar(self, myvar):
+	def get_var(self, myvar):
 		"""
 		Return the value of a portage variable
 		"""
 		return portage.settings[myvar]
 
-	def getPlatform(self):
+	def get_platform(self):
 		"""
 		Return host platform
 		"""
 		return platform.platform(aliased=1)
 
-	def getLastSync(self):
+	def get_last_sync(self):
 		"""
 		Return portage tree last sync time
 		"""
-		lastsync = None
+		last_sync = None
+
 		try:
-			lastsync = portage.grabfile(os.path.join(self.portdir, 'metadata', 'timestamp.chk'))
+			last_sync = portage.grabfile(os.path.join(self.portdir, 'metadata', 'timestamp.chk'))
 		except portage.exception.PortageException:
 			pass
-		if lastsync is None:
-			return 'Unknown'
-		return lastsync[0]
 
-	def getProfile(self):
+		if last_sync is None:
+			return 'Unknown'
+
+		return last_sync[0]
+
+	def get_profile(self):
 		"""
 		Return selected portage profile
 		"""

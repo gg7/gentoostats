@@ -8,19 +8,19 @@ class Packages(object):
 	A class encapsulating providers for reading installed packages from portage
 	"""
 
-	def getInstalledCPs(self):
+	def get_installed_CPs(self):
 		"""
 		Read installed packages as category/packagename
 		"""
 		return VARDB.cp_all()
 
-	def getInstalledCPVs(self):
+	def get_installed_CPVs(self):
 		"""
 		Read installed packages as category/packagename-version
 		"""
 		return VARDB.cpv_all()
 
-	def getSelectedSets(self):
+	def get_selected_sets(self):
 		"""
 		Returns a dictionary with all of the selected sets expressed as Python
 		lists. The dictionary will include at least the "selected" set, as well

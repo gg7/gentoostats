@@ -25,7 +25,7 @@ class Metadata(object):
 
 		self.pkguse = gentoolkit.flag.get_installed_use(cpv, use="PKGUSE")
 
-	def getUseFlagInformation(self):
+	def get_use_flag_information(self):
 		"""
 		Returns [ebuild's IUSE], [user's PKGUSE], and [final USE].
 		"""
@@ -35,13 +35,13 @@ class Metadata(object):
 		       , 'FINAL':  self.final_use
 		       }
 
-	def getKeyword(self):
+	def get_keyword(self):
 		"""
 		Return keyword used to install package
 		"""
 		return self.keyword
 
-	def getRepoName(self):
+	def get_repo_name(self):
 		"""
 		Return the repository the package was installed from
 		"""
@@ -49,13 +49,13 @@ class Metadata(object):
 			return self.repo
 		return 'Unknown'
 
-	def getBuildTime(self):
+	def get_build_time(self):
 		"""
 		Return the time package was built
 		"""
 		return self.build_time
 
-	def getSize(self):
+	def get_size(self):
 		"""
 		Return the size of the installed package
 		"""
