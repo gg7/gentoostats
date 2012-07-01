@@ -23,7 +23,7 @@ class Packages(object):
 		return VARDB.cpv_all()
 
 	@staticmethod
-	def get_set(set_name, recursive=True):
+	def get_set(set_name='world', recursive=True):
 		"""
 		Returns a dictionary containing the given set and all of its
 		atoms/subsets. If recursive is True, this is done recursively.
