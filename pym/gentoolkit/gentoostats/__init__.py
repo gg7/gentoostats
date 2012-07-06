@@ -63,7 +63,6 @@ def set_args(parser):
 
 	parser.add_argument( '-h', '--help'
 	                   , action='store_true'
-	                   , only_in_help=True
 	                   , help="Display this help message"
 	)
 	parser.add_argument( '-q', '--quiet'
@@ -95,7 +94,7 @@ def set_args(parser):
 	                   , help="Debug mode"
 	)
 	parser.add_argument( 'module'
-	                   , nargs=1
+	                   , nargs='?'
 	                   , ignore_in_desc=True
 	)
 
@@ -120,6 +119,22 @@ def main(args):
 
 	global_args, module_args = arg_parser.parse_known_args(args)
 	config.update(vars(global_args))
+
+	# Normally argparse takes care of --help and prints a help message if
+	# -h/--help is present in args. However, I want to be able to print the
+	# module help message with `gentoostats -h MODULE`, not the help message for
+	# the app (this file), so I've resorted to a couple of hacks.
+	if config.help and not config.module:
+		arg_parser.print_help(with_description=True)
+		return 0
+
+	if not config.module:
+		arg_parser.print_help(with_description=False)
+		return 2
+
+	if config.help:
+		module_args.append('-h')
+		config.help=None
 
 	if config.quiet:
 		if config.verbose and config.verbose > 0:
