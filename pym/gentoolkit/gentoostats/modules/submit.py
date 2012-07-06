@@ -48,7 +48,9 @@ class Submit(object):
 		"""Adds module arguments to parser."""
 
 		parser.add_argument( '-h', '--help'
+		                   , action='store_true'
 		                   , dest='help_dummy'
+		                   , only_in_help=True
 		                   , help="Display this help message"
 		)
 		parser.add_argument( '-s', '--server'
@@ -94,7 +96,6 @@ class Submit(object):
 			desc     = MODULE_INFO[2],
 			indent   = self.config.indent,
 			indent_c = self.config.indent_c,
-			add_help = False,
 		)
 		self.set_args(self.arg_parser)
 

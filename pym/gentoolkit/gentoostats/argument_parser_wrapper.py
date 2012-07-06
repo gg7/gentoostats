@@ -90,9 +90,9 @@ class ArgumentParserWrapper(object):
 		Add an argument to the parser.
 		"""
 
-		#if '-h' in args or '--help' in args:
-		#	self.args.append( (args, kwargs) )
-		#	return
+		if kwargs.get('only_in_help'):
+			self.args.append( (args, kwargs) )
+			return
 
 		kwargs_to_pass = dict(kwargs)
 		if 'ignore_in_desc' in kwargs:

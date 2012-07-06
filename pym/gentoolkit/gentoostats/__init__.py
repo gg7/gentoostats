@@ -63,6 +63,7 @@ def set_args(parser):
 
 	parser.add_argument( '-h', '--help'
 	                   , action='store_true'
+	                   , only_in_help=True
 	                   , help="Display this help message"
 	)
 	parser.add_argument( '-q', '--quiet'
