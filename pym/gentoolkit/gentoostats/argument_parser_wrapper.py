@@ -117,10 +117,12 @@ class ArgumentParserWrapper(object):
 
 		def _replace_if_found(s, what_to_replace, replacement):
 			"""
-				>>> _replace_if_found("abcd", "ab", "1")
-				(True, "1cd")
-				>>> _replace_if_found("abcd", "x", "1")
-				(False, "abcd")
+			Usage:
+
+			>>> _replace_if_found('abcd', 'ab', '1')
+			(True, '1cd')
+			>>> _replace_if_found('abcd', 'x', '1')
+			(False, 'abcd')
 			"""
 
 			new_s = s.replace(what_to_replace, replacement)
