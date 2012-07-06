@@ -27,18 +27,19 @@ def expand_module_name(name_map, module_name):
 def bold_out_command(command, name):
 	"""
 	Usage:
-		>>> bold_out_command('s', 'submit')
-		"(s)ubmit"
-		>>> bold_out_command('p', 'no-pipe')
-		"no-(p)ipe"
-		>>> bold_out_command('D', 'debug')
-		"debug (D)"
-		>>> bold_out_command('yz', 'xyz')
-		"x(yz)"
-		>>> bold_out_command('', 'xyz')
-		"xyz"
-		>>> bold_out_command(None, 'xyz')
-		"xyz"
+
+	>>> bold_out_command('s', 'submit')
+	'(s)ubmit'
+	>>> bold_out_command('p', 'no-pipe')
+	'no-(p)ipe'
+	>>> bold_out_command('D', 'debug')
+	'debug (D)'
+	>>> bold_out_command('yz', 'xyz')
+	'x(yz)'
+	>>> bold_out_command('', 'xyz')
+	'xyz'
+	>>> bold_out_command(None, 'xyz')
+	'xyz'
 	"""
 
 	if not command:
