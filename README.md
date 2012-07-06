@@ -57,7 +57,7 @@ Installation
 Dependencies
 ------------
 
-* Python 2.6+ (including Python 3+)
+* Python 2.7+ (including Python 3+)
 * Portage
 * Gentoolkit
 
