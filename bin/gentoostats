@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+#
+# Copyright 2011 Vikraman Choudhury <vikraman.choudhury@gmail.com>
+# Copyright 2012 G. Gaydarov <ggaydarov@gmail.com>
+#
+# Distributed under the terms of the GNU General Public License v2 or later
+
+"""'gentoostats' reports various statistics about a Gentoo system to an official
+Gentoo server. These statistics can be valuable to both users and developers.
+"""
+
+from __future__ import print_function
+
+# Ensure that ^C interrupts are handled quietly (code adapted from Portage):
+try:
+	import sys
+	import signal
+
+	def signal_handler(signum, frame=None):
+		signal.signal(signal.SIGINT, signal.SIG_IGN)
+		signal.signal(signal.SIGTERM, signal.SIG_IGN)
+
+		print("\n\nAborted.")
+		sys.exit(128 + signum)
+
+	signal.signal(signal.SIGINT, signal_handler)
+	signal.signal(signal.SIGTERM, signal_handler)
+	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
+	from gentoolkit import gentoostats, errors
+
+	try:
+		sys.exit(gentoostats.main(sys.argv[1:]))
+	except errors.GentoolkitException as err:
+		if '--debug' in sys.argv:
+			raise
+		else:
+			from gentoolkit import pprinter as pp
+
+			print(pp.error(str(err)), file=sys.stderr)
+			print()
+			print("Add '--debug' to global options for traceback.")
+
+			sys.exit(1)
+
+except KeyboardInterrupt:
+	import sys
+	print("\n\nAborted.")
+	sys.exit(130)
