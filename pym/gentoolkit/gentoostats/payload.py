@@ -106,13 +106,12 @@ class Payload(object):
 		self.set_data(self.payload, 'ENV', 'LASTSYNC', env.get_last_sync)
 		self.set_data(self.payload, 'ENV', 'PROFILE', env.get_profile)
 
-		for var in ['ARCH', 'CHOST', 'CFLAGS', 'CXXFLAGS', 'FFLAGS', 'SYNC',
-				'LDFLAGS', 'MAKEOPTS', 'EMERGE_DEFAULT_OPTS',
-				'PORTAGE_RSYNC_EXTRA_OPTS', 'ACCEPT_LICENSE']:
+		for var in ['ARCH', 'CHOST', 'CTARGET', 'CFLAGS', 'CXXFLAGS', 'FFLAGS',
+				'LDFLAGS', 'ACCEPT_LICENSE', 'MAKEOPTS', 'EMERGE_DEFAULT_OPTS',
+				'PORTAGE_RSYNC_EXTRA_OPTS', 'SYNC', 'LANG']:
 			self.set_data(self.payload, 'ENV', var, env.get_var, var)
 
-		for var in ['ACCEPT_KEYWORDS', 'LANG', 'GENTOO_MIRRORS', 'FEATURES',
-				'USE']:
+		for var in ['ACCEPT_KEYWORDS', 'GENTOO_MIRRORS', 'FEATURES', 'USE']:
 			self.set_data(self.payload, 'ENV', var, lambda x: env.get_var(x).split(), var)
 
 		# Only bother calling get_installed_CPVs() if any of the following is
