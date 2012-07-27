@@ -14,7 +14,7 @@ DEFAULT_CONFIG = dict(
 
 class Config(object):
 	def __init__(self):
-		self.settings = DEFAULT_CONFIG
+		self.settings = dict(DEFAULT_CONFIG)
 
 	@staticmethod
 	def get_settings_dict(new_settings):
