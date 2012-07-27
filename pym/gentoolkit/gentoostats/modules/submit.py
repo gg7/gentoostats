@@ -86,10 +86,12 @@ class Submit(object):
 		                           % ('yes' if self.config.ssl else 'no')
 		)
 
-	def __init__(self, config_updates={}):
+	def __init__(self, config_updates=None):
 		self.config = Config()
 		self.config.update(MODULE_DEFAULT_CONFIG)
-		self.config.update(config_updates)
+
+		if config_updates:
+			self.config.update(config_updates)
 
 		self.arg_parser = ArgumentParserWrapper(
 			name     = MODULE_INFO[1],
