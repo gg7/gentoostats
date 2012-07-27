@@ -71,6 +71,7 @@ def set_args(parser):
 	)
 	parser.add_argument( '-v', '--verbose'
 	                   , action='count'
+	                   , default=None
 	                   , help="Increase verbosity level"
 	)
 	parser.add_argument( '-C', '--no-color', '--no-colour', \
@@ -118,7 +119,7 @@ def main(args):
 	arg_parser.set_modules(FORMATTED_OPTIONS)
 
 	global_args, module_args = arg_parser.parse_known_args(args)
-	config.update(vars(global_args))
+	config.hard_update(vars(global_args))
 
 	# Normally argparse takes care of --help and prints a help message if
 	# -h/--help is present in args. However, I want to be able to print the
