@@ -1,0 +1,99 @@
+.TH "GENTOOSTATS" "1" "July 2012" "gentoostats" "User's Manual: Gentoostats"
+.SH "NAME"
+Gentoostats: reports various Gentoo\-related statistics to an official Gentoo
+server.
+.SH "SYNOPSIS"
+.SY gentoostats
+.OP "global-options: -hqvCNV"
+module
+.OP module-options
+.YS
+.SH "DESCRIPTION"
+\&'Gentoostats' is an official Gentoo project that aims to be useful to both
+developers and users by gathering various statistics.
+.SH "GLOBAL OPTIONS"
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display a help message
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+Set verbosity to 0
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Increase verbosity level
+.TP
+\fB\-C\fR, \fB\-\-no\-color\fR
+Turn off colors
+.TP
+\fB\-N\fR, \fB\-\-no\-pipe\fR
+Turn off pipe detection
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Display version info
+.SH "MODULES"
+.SS "configure"
+.P
+Configure Gentoostats
+.P
+Options
+.RS 4n
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display a help message
+.RE
+.SS "submit"
+.P
+Generate and submit statistics
+.P
+Options
+.RS 4n
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display a help message
+.TP
+\fB\-s\fR, \fB\-\-server\fR \fIADDR:PORT\fR
+Server to upload stats to (default: soc.dev.gentoo.org:443)
+.TP
+\fB\-u\fR, \fB\-\-url\fR \fIURL\fR
+URL to use for the upload (e.g. /upload/)
+.TP
+\fB\-p\fR, \fB\-\-pretend\fR
+Generate, but don't upload stats
+.TP
+\fB\-a\fR, \fB\-\-auth\fR \fIFILE\fR
+Authentication config file (default: /etc/gentoostats/auth.cfg)
+.TP
+\fB\-P\fR, \fB\-\-payload\fR \fIFILE\fR
+Payload config file (default: /etc/gentoostats/payload.cfg)
+.TP
+\fB\-\-ssl\fR \fICHOICE\fR
+Use SSL when uploading stats (default: yes)
+.RE
+.SH "EXAMPLES"
+.EX
+gentoostats -h
+.XE
+.EX
+gentoostats configure
+.XE
+.EX
+gentoostats submit -vv
+.XE
+.SH "BUGS"
+Submit bug reports to
+.UR https://github.com/gg7/gentoostats/issues
+github
+.UE , or to
+.UR https://bugs.gentoo.org/
+the Gentoo bugzilla
+.UE
+.SH "AUTHORS"
+.UR vikraman.choudhury@gmail.com
+Vikraman Choudhury
+.UE
+(2011)
+.br
+.UR ggaydarov@gmail.com
+G. Gaydarov
+.UE
+(2012-current)
