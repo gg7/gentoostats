@@ -9,12 +9,7 @@ from __future__ import print_function
 
 import sys
 import json
-
-try:
-	# Support Python 2.6 (argparse is part of Python 2.7+):
-	import argparse
-except ImportError:
-	from . import argparse
+import argparse
 
 try:
 	import ConfigParser
