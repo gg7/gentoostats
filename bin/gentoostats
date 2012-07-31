@@ -27,7 +27,8 @@ try:
 	signal.signal(signal.SIGTERM, signal_handler)
 	signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
-	from gentoolkit import gentoostats, errors
+	import gentoostats
+	from gentoolkit import errors
 
 	try:
 		sys.exit(gentoostats.main(sys.argv[1:]))

@@ -25,9 +25,9 @@ import sys
 import pkgutil
 
 import gentoolkit
-from gentoolkit.gentoostats.config import Config
-from gentoolkit.gentoostats.app_util import *
-from gentoolkit.gentoostats.argument_parser_wrapper import ArgumentParserWrapper
+from .config import Config
+from .app_util import *
+from .argument_parser_wrapper import ArgumentParserWrapper
 
 # Add ./modules/ to the current Python path:
 sys.path.append(os.path.join(os.path.dirname(__file__), 'modules'))

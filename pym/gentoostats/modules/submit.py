@@ -18,10 +18,10 @@ except ImportError:
 
 import sys
 
-from gentoolkit.gentoostats.util import serialize, FlexibleBool
-from gentoolkit.gentoostats.payload import Payload
-from gentoolkit.gentoostats.config import Config
-from gentoolkit.gentoostats.argument_parser_wrapper import ArgumentParserWrapper
+from gentoostats.util import serialize, FlexibleBool
+from gentoostats.config import Config
+from gentoostats.payload import Payload
+from gentoostats.argument_parser_wrapper import ArgumentParserWrapper
 
 # You can also use __name__.split('.')[-1] here.
 MODULE_INFO = (

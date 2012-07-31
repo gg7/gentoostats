@@ -21,8 +21,8 @@ except ImportError:
 import gentoolkit
 from portage import output
 
-from gentoolkit.gentoostats.config import Config
-from gentoolkit.gentoostats.argument_parser_wrapper import ArgumentParserWrapper
+from gentoostats.config import Config
+from gentoostats.argument_parser_wrapper import ArgumentParserWrapper
 
 MODULE_INFO = (
 	'c', 'configure', 'configure gentoostats'

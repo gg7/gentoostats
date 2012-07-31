@@ -16,7 +16,7 @@ except ImportError:
 import sys
 
 import gentoolkit
-from gentoolkit.gentoostats.app_util import format_options_respect_newline
+from .app_util import format_options_respect_newline
 from gentoolkit.base import mod_usage, main_usage
 
 DEFAULT_OPT_INDENT = 2
