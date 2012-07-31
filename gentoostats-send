@@ -70,24 +70,16 @@ def main():
 	"""
 	parser = argparse.ArgumentParser(description='Gentoostats client')
 	parser.add_argument('-s', '--server', default=DEFAULT_SERVER)
-	parser.add_argument('-p', '--port', type=int, default=DEFAULT_PORT)
 	parser.add_argument('-u', '--url', default='/upload')
 	parser.add_argument('-a', '--auth', default='/etc/gentoostats/auth.cfg')
 	parser.add_argument('-c', '--config', default='/etc/gentoostats/payload.cfg')
 	parser.add_argument('-v', '--verbose', action='count', default=0)
-	parser.add_argument('-d', '--dryrun', action='store_true')
+	parser.add_argument('-p', '--pretend', action='store_true')
 	parser.add_argument('--nossl', action='store_true')
 
 	args = vars(parser.parse_args())
 
-	if not 0 < args['port'] < 65535:
-		print("Error: invalid port number")
-		return
-
-	if args['nossl'] and args['port'] == DEFAULT_PORT:
-		print("Note: Have you forgotten to change the port number?")
-
-	server_url  = "%s:%s" % (args['server'], str(args['port']))
+	server_url  = args['server']
 	request_url = args['url'].rstrip('/') + '/'
 
 	if args['verbose']:
@@ -132,7 +124,7 @@ def main():
 	else:
 		conn_class = httplib.HTTPSConnection
 
-	if args['dryrun']:
+	if args['pretend']:
 		print("Dry run, exiting...")
 		return
 
