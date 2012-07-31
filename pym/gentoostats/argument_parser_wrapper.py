@@ -7,13 +7,8 @@
 
 from __future__ import print_function
 
-try:
-	# Support Python 2.6 (argparse is part of Python 2.7+):
-	import argparse
-except ImportError:
-	from . import argparse
-
 import sys
+import argparse
 
 import gentoolkit
 from .app_util import format_options_respect_newline
