@@ -70,9 +70,12 @@ Installation
 NOTE: Currently there is no official server running, so you can't actually
 report any statistics. You are free to experiment with the client though.
 
-To download the unstable client, clone the 'gg7' branch of this repo:
+To download the client, clone this repo:
 
-    git clone -b gg7 https://github.com/gg7/gentoostats.git
+    git clone https://github.com/gg7/gentoostats.git
+
+Place the directory wherever you want, but remember to add gentoostats' 'bin'
+directory to your $PATH, and the 'pym' directory to your $PYTHONPATH.
 
 Configuration
 =============
